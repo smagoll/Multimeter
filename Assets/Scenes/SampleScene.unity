@@ -1231,9 +1231,9 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 1024
@@ -1588,7 +1588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   display: {fileID: 2047779248}
   knob: {fileID: 7357889776939657660}
-  modesView:
+  modeViews:
   - {fileID: 7964885887496604139}
   - {fileID: 403034345}
   - {fileID: 868363656}

@@ -14,26 +14,34 @@ public class MultimeterModel
 
     public event Action<IMultimeterMode, float> OnChanged;
 
-    public MultimeterModel(List<IMultimeterMode> modes, float power, float resistance)
+    public MultimeterModel(List<IMultimeterMode> modes)
     {
         _modes = modes;
+    }
+
+    public void SetPower(float power)
+    {
         _power = power;
+    }
+
+    public void SetResistance(float resistance)
+    {
         _resistance = resistance;
     }
 
-    public void Next()
+    public void NextMode()
     {
         _currentIndex = (_currentIndex + 1) % _modes.Count;
-        Update();
+        Notify();
     }
 
-    public void Previous()
+    public void PreviousMode()
     {
         _currentIndex = (_currentIndex - 1 + _modes.Count) % _modes.Count;
-        Update();
+        Notify();
     }
 
-    private void Update()
+    private void Notify()
     {
         float value = CurrentMode.Calculate(_power, _resistance);
         OnChanged?.Invoke(CurrentMode, value);

@@ -28,13 +28,15 @@ public class MultimeterController : MonoBehaviour
             new ResistanceMode(),
         };
 
-        _model = new MultimeterModel(modes, 400f, 1000f);
+        _model = new MultimeterModel(modes);
+        _model.SetPower(400);
+        _model.SetResistance(1000);
 
         _model.OnChanged += HandleChanged;
     }
     
-    public void Next() => _model.Next();
-    public void Previous() => _model.Previous();
+    public void Next() => _model.NextMode();
+    public void Previous() => _model.PreviousMode();
     
     public void Activate()
     {

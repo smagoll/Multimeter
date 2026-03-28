@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -13,42 +14,27 @@ public class UIMultimeter : MonoBehaviour
     private void Start()
     {
         Hide();
-        UpdateText(MeasurementMode.Neutral, 0);
+        UpdateUI(MeasurementMode.Neutral, 0);
     }
 
-    private void Show()
-    {
-        valuesText.gameObject.SetActive(true);
-    }
+    private void Show() => valuesText.gameObject.SetActive(true);
 
-    private void Hide()
-    {
-        valuesText.gameObject.SetActive(false);
-    }
+    private void Hide() => valuesText.gameObject.SetActive(false);
 
     private void OnChanged(IMultimeterMode currentMode, float value)
     {
-        UpdateText(currentMode.Mode, value);
+        UpdateUI(currentMode.Mode, value);
     }
 
-    private void UpdateText(MeasurementMode modeType, float value)
+    private void UpdateUI(MeasurementMode mode, float value)
     {
-        sb.Clear();
-
-        foreach (var mode in multimeterController.Modes)
+        var lines = multimeterController.Modes.Select(m =>
         {
-            float v = mode.Mode == modeType ? value : 0f;
-            if(mode.Label != null) AppendLine(mode.Label, v);
-        }
+            float v = m.Mode == mode ? value : 0f;
+            return m.Label != null ? $"{m.Label}  {v:F2}" : null;
+        });
 
-        valuesText.text = sb.ToString();
-    }
-    
-    private void AppendLine(string label, float value)
-    {
-        sb.Append(label);
-        sb.Append("  ");
-        sb.AppendLine(value.ToString("F2"));
+        valuesText.text = string.Join("\n", lines);
     }
 
     private void OnEnable()
