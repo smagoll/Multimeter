@@ -13,6 +13,8 @@ public class MultimeterController : MonoBehaviour
 
     private MultimeterModel _model;
     
+    public IReadOnlyList<IMultimeterMode> Modes => _model.Modes;
+    
     private bool isActive;
 
     private void Awake()

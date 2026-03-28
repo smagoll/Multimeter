@@ -10,6 +10,7 @@ public class MultimeterModel
     private float _resistance;
 
     public IMultimeterMode CurrentMode => _modes[_currentIndex];
+    public IReadOnlyList<IMultimeterMode> Modes => _modes;
 
     public event Action<IMultimeterMode, float> OnChanged;
 

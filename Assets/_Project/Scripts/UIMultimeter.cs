@@ -10,7 +10,7 @@ public class UIMultimeter : MonoBehaviour
 
     private readonly StringBuilder sb = new StringBuilder();
 
-    private void Awake()
+    private void Start()
     {
         Hide();
         UpdateText(MeasurementMode.Neutral, 0);
@@ -25,20 +25,21 @@ public class UIMultimeter : MonoBehaviour
     {
         valuesText.gameObject.SetActive(false);
     }
-    
-    private void MultimeterControllerOnChanged(IMultimeterMode mode, float value)
+
+    private void OnChanged(IMultimeterMode currentMode, float value)
     {
-        UpdateText(mode.Mode, value);
+        UpdateText(currentMode.Mode, value);
     }
 
-    private void UpdateText(MeasurementMode mode, float value)
+    private void UpdateText(MeasurementMode modeType, float value)
     {
         sb.Clear();
 
-        AppendLine("V", mode == MeasurementMode.DCVoltage ? value : 0f);
-        AppendLine("A", mode == MeasurementMode.Current ? value : 0f);
-        AppendLine("Ω", mode == MeasurementMode.Resistance ? value : 0f);
-        AppendLine("V~", mode == MeasurementMode.ACVoltage ? value : 0f);
+        foreach (var mode in multimeterController.Modes)
+        {
+            float v = mode.Mode == modeType ? value : 0f;
+            if(mode.Label != null) AppendLine(mode.Label, v);
+        }
 
         valuesText.text = sb.ToString();
     }
@@ -54,12 +55,13 @@ public class UIMultimeter : MonoBehaviour
     {
         multimeterController.OnActivated += Show;
         multimeterController.OnDeactivated += Hide;
-        multimeterController.OnChanged += MultimeterControllerOnChanged;
+        multimeterController.OnChanged += OnChanged;
     }
 
     private void OnDisable()
     {
         multimeterController.OnActivated -= Show;
         multimeterController.OnDeactivated -= Hide;
+        multimeterController.OnChanged -= OnChanged;
     }
 }
